@@ -8,7 +8,7 @@ class User < ApplicationRecord
   def get_longlived_token
     url = URI.parse("https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=#{ENV["FB_APP_ID"]}&client_secret=#{ENV["FB_APP_SECRET"]}&fb_exchange_token=#{self.fb_token}")
     response = Net::HTTP.get_response(url)
-    # TODO Response from FB is 400, longlived token is not being saved
+    # TODO Response from FB is 400, longlived token is not being saved..Check when request comes from app
     if response.code == "200"
       parameters = Rack::Utils.parse_nested_query(response.body)
       long_token = parameters["access_token"]
@@ -17,7 +17,7 @@ class User < ApplicationRecord
   end
 
   def self.get_facebook_data token
-    url = "https://graph.facebook.com/v2.4/me?fields=name,email,birthday,picture.width(400)&access_token=#{token}"
+    url = "https://graph.facebook.com/v2.4/me?fields=name,email,picture.width(400)&access_token=#{token}"
     response = Net::HTTP.get_response(URI.parse(url)) 
     if response.code == "200"
       data = JSON.parse(response.body)
@@ -57,18 +57,18 @@ class User < ApplicationRecord
   # TODO INSTALL AND SET REDIS
 
   def self.create_access_token uuid
-    # access_token = SecureRandom.hex(16)
-    # Redis.current.set("user:token:#{access_token}", uuid)
-    # access_token
+    access_token = SecureRandom.hex(16)
+    Redis.current.set("user:token:#{access_token}", uuid)
+    access_token
   end
 
   def logout access_token
-    # Redis.current.del("user:token:#{access_token}")
+    Redis.current.del("user:token:#{access_token}")
   end  
 
   def self.get_user_from_token token
-    # uuid = Redis.current.get("user:token:#{token}")
-    # user = User.find_by_uuid(uuid) rescue nil
+    uuid = Redis.current.get("user:token:#{token}")
+    user = User.find_by_uuid(uuid) rescue nil
   end
 
 end

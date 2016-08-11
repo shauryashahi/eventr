@@ -38,13 +38,11 @@ ActiveRecord::Schema.define(version: 20160811105319) do
     t.string   "fb_id"
     t.string   "name"
     t.string   "email"
-    t.uuid     "uuid",         default: -> { "uuid_generate_v4()" }
-    t.date     "birthday"
+    t.uuid     "uuid",       default: -> { "uuid_generate_v4()" }
     t.string   "pic_url"
     t.text     "fb_token"
-    t.string   "access_token"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
   end
 
   add_foreign_key "group_users", "groups"

@@ -2,7 +2,7 @@ module Api::V1
   class ApiController < ApplicationController
     include ActionController::HttpAuthentication::Token::ControllerMethods
 
-    #before_action :authenticate, except: [:login_with_fb]
+    before_action :authenticate, except: [:login_with_fb]
     before_action :set_headers
 
     def set_headers

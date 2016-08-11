@@ -6,14 +6,14 @@ module Api::V1
       if flag
         render json: {:data=>user.reload.attributes,:access_token=>auth_token,:message=>"Logged In"}, status: 200
       else
-        render json: {:data=>{}, :access_token=>nil, :message => "Something Went Wrong"}, status: 400
+        render json: {:data=>{}, :access_token=>nil, :message => "Cannot Login right now. Try again after a while."}, status: 422
       end
     end
 
     def logout
       authenticate_with_http_token do |token, options|
         @current_user.logout(token)
-        render json: {:message => "Logged Out"}, status: 200
+        render json: {:message => "Succesfully Logged Out"}, status: 200
       end
     end
   end
