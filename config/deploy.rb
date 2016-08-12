@@ -1,6 +1,7 @@
 
 set :repo_url,        'git@github.com:shauryashahi/eventr.git'
 set :application,     'eventr'
+set :user,            'deploy'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
 
