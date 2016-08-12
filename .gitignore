@@ -17,7 +17,7 @@
 /tmp
 /.byebug_history
 /.idea
-Gemfile.lock
+# Gemfile.lock
 # Ignore public assets in production
 public/assets/
 public/uploads/
