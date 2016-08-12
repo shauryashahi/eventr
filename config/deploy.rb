@@ -1,4 +1,4 @@
-server 'server', user: 'deploy', roles: %w{web app db}, primary: true
+server '52.26.148.176', user: 'deploy', roles: %w{web app db}, primary: true
 
 set :repo_url,        'git@github.com:shauryashahi/eventr.git'
 set :application,     'eventr'
