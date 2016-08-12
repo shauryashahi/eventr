@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
-  resources :users
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: [:show]
+      resources :groups
+      post 'login', to:"auth#login_with_fb"
+      post 'logout', to:"auth#logout"
+      get 'events', to:"events#index"
+      get 'events/:id', to:"events#show"
+    end
+  end
 end
+

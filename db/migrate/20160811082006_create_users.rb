@@ -5,7 +5,6 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :name
       t.string :email
       t.uuid :uuid, default: "uuid_generate_v4()"
-      t.date :birthday
       t.string :pic_url
       t.text :fb_token
       t.timestamps
