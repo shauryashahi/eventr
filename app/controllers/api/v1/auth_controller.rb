@@ -12,8 +12,11 @@ module Api::V1
 
     def logout
       authenticate_with_http_token do |token, options|
-        @current_user.logout(token)
-        render json: {:message => "Succesfully Logged Out"}, status: 200
+        if @current_user.logout(token)
+          render json: {:message => "Succesfully Logged Out"}, status: 200
+        else
+          render json: {:message => "Cannot Log Out right now. Try again after a while."}, status: 400
+        end
       end
     end
   end
