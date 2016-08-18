@@ -1,15 +1,9 @@
 module Api::V1
   class UsersController < ApiController
-    before_action :set_user, only: [:show]
 
-    # GET /users/1
-    def show
-      render json: @user
+    def user_profile
+      render json: {:data => @current_user.attributes.except("fb_token"), :message => "Success"}, status: 200
     end
 
-    private
-      def set_user
-        @user = User.find(params[:id])
-      end
   end
 end
