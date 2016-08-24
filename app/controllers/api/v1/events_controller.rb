@@ -14,9 +14,12 @@ module Api::V1
     end
 
     def rsvp_to_event
+      render json: {:message => "Success"}, status: 200
     end
 
     def events_by_location
+      byebug
+      render json: {:data => Constants::DUMMY_NEARBY_EVENTS, :message => "Success"}, status: 200
     end
 
     private
