@@ -13,6 +13,18 @@ module Constants
         "source"=> "https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xlf1/t31.0-8/s720x720/11041934_861505993897921_8261515772935041361_o.jpg",
         "id"=> "861505993897921"
       },
+      "place" => {
+        "name" => "He Said She Said - Mumbai",
+        "location" => {
+          "city" => "Mumbai",
+          "country" => "India",
+          "latitude" => 19.134105832915,
+          "longitude" => 72.836869288832,
+          "street" => "Veera Desai Road, Andheri (W)",
+          "zip" => "400053"
+        },
+        "id" => "603052483066057"
+      },
       "start_time" => "2015-08-29T00:00:00+0530"
     },
     {
@@ -27,6 +39,18 @@ module Constants
         "offset_y"=> 0,
         "source"=> "https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xlf1/t31.0-8/s720x720/11041934_861505993897921_8261515772935041361_o.jpg",
         "id"=> "861505993897921"
+      },
+      "place" => {
+        "name" => "He Said She Said - Mumbai",
+        "location" => {
+          "city" => "Mumbai",
+          "country" => "India",
+          "latitude" => 19.134105832915,
+          "longitude" => 72.836869288832,
+          "street" => "Veera Desai Road, Andheri (W)",
+          "zip" => "400053"
+        },
+        "id" => "603052483066057"
       },
       "start_time" => "2015-08-29T00:00:00+0530"
     },
@@ -43,6 +67,18 @@ module Constants
         "source"=> "https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xlf1/t31.0-8/s720x720/11041934_861505993897921_8261515772935041361_o.jpg",
         "id"=> "861505993897921"
       },
+      "place" => {
+        "name" => "He Said She Said - Mumbai",
+        "location" => {
+          "city" => "Mumbai",
+          "country" => "India",
+          "latitude" => 19.134105832915,
+          "longitude" => 72.836869288832,
+          "street" => "Veera Desai Road, Andheri (W)",
+          "zip" => "400053"
+        },
+        "id" => "603052483066057"
+      },
       "start_time" => "2015-08-29T00:00:00+0530"
     },
     {
@@ -58,6 +94,18 @@ module Constants
         "source"=> "https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xlf1/t31.0-8/s720x720/11041934_861505993897921_8261515772935041361_o.jpg",
         "id"=> "861505993897921"
       },
+      "place" => {
+        "name" => "He Said She Said - Mumbai",
+        "location" => {
+          "city" => "Mumbai",
+          "country" => "India",
+          "latitude" => 19.134105832915,
+          "longitude" => 72.836869288832,
+          "street" => "Veera Desai Road, Andheri (W)",
+          "zip" => "400053"
+        },
+        "id" => "603052483066057"
+      },
       "start_time" => "2015-08-29T00:00:00+0530"
     },
     {
@@ -72,6 +120,18 @@ module Constants
         "offset_y"=> 0,
         "source"=> "https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xlf1/t31.0-8/s720x720/11041934_861505993897921_8261515772935041361_o.jpg",
         "id"=> "861505993897921"
+      },
+      "place" => {
+        "name" => "He Said She Said - Mumbai",
+        "location" => {
+          "city" => "Mumbai",
+          "country" => "India",
+          "latitude" => 19.134105832915,
+          "longitude" => 72.836869288832,
+          "street" => "Veera Desai Road, Andheri (W)",
+          "zip" => "400053"
+        },
+        "id" => "603052483066057"
       },
       "start_time" => "2015-08-29T00:00:00+0530"
     }
