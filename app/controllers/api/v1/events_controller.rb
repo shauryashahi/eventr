@@ -18,7 +18,6 @@ module Api::V1
     end
 
     def events_by_location
-      byebug
       render json: {:data => Constants::DUMMY_NEARBY_EVENTS, :message => "Success"}, status: 200
     end
 
