@@ -376,4 +376,62 @@ module Constants
     }
 }
 
+DUMMY_GROUPS = {
+  "data": [
+    {
+      "id": 1,
+      "fb_event_id": "123123",
+      "name": "GROUP 1",
+      "admin_id": 2,
+      "uuid": "664577fd-48e4-471c-918a-67032f82ea84",
+      "created_at": "2016-08-26T10:23:12.721Z",
+      "updated_at": "2016-08-26T10:23:12.721Z"
+    },
+    {
+      "id": 2,
+      "fb_event_id": "123123",
+      "name": "GROUP 2",
+      "admin_id": 3,
+      "uuid": "252481c0-29c6-4fa8-8fc5-18dab265c27f",
+      "created_at": "2016-08-26T10:23:24.231Z",
+      "updated_at": "2016-08-26T10:23:24.231Z"
+    },
+    {
+      "id": 3,
+      "fb_event_id": "21232323",
+      "name": "GROUP 3",
+      "admin_id": 2,
+      "uuid": "88d91a73-c4a9-4e9c-8658-fd81f4c43e58",
+      "created_at": "2016-08-26T10:23:42.166Z",
+      "updated_at": "2016-08-26T10:23:42.166Z"
+    }
+  ],
+  "message": "Success"
+}
+
+DUMMY_GROUP_MEMBERS = {
+  "data": [
+    {
+      "id": 2,
+      "fb_id": "10153857359586274",
+      "name": "Zlatan Ibrahimovic",
+      "email": "zlt@gmail.com",
+      "uuid": "52df54a7-5a53-499b-bdcc-f2246a8ad30b",
+      "pic_url": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xla1/v/t1.0-1/p320x320/13344616_1203015486384517_3025044413249495108_n.jpg?oh=41cb733e598d28b7a1524545f6480979&oe=583AAFB2&__gda__=1481523927_159ab07ff246564b98119e15275d9d60",
+      "created_at": "2016-08-16T17:02:59.144Z",
+      "updated_at": "2016-08-24T13:10:07.576Z"
+    },
+    {
+      "id": 3,
+      "fb_id": "10151231359586274",
+      "name": "Paul Pogba",
+      "email": "pobz@gmail.com",
+      "uuid": "52df54a7-5a53-499b-bdcc-f2246a8ad30b",
+      "pic_url": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/p320x320/14117865_944361905691544_3073635104560717675_n.jpg?oh=63d989338cc9e28265aca07fb5836327&oe=5852B0F8&__gda__=1480438419_bc098ceb80e6fe603fb274e7c288472a",
+      "created_at": "2016-08-16T17:02:59.144Z",
+      "updated_at": "2016-08-24T13:10:07.576Z"
+    }
+  ],
+  "message": "Success"
+}
 end
