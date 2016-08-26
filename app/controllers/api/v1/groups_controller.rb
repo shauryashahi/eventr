@@ -1,53 +1,53 @@
 module Api::V1
   class GroupsController < ApiController
-    before_action :set_group, only: [:show, :update, :destroy]
+    # before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members]
 
-    # GET /groups
-    def index
-      @groups = Group.all
-
-      render json: @groups
-    end
-
-    # GET /groups/1
-    def show
-      render json: @group
-    end
-
-    # POST /groups
-    def create
-      @group = Group.new(group_params)
-
-      if @group.save
-        render json: @group.reload, status: :created, location: @group
+    def event_groups
+      if params[:fb_event_id].present?
+        # groups = Group.where(:fb_event_id=>params[:fb_event_id])
+        # render json: {:data=>groups.as_json,:message => "Success"}, status: 200
+        render json: {:data=>Constants::DUMMY_EVENT_GROUPS, :message=>"Success"}, status: 200
       else
-        render json: @group.errors, status: :unprocessable_entity
+        render json: {:message => "Cannot find FB Event ID. Check Input Parameters."}, status: 400
       end
     end
 
-    # PATCH/PUT /groups/1
-    def update
-      if @group.update(group_params)
-        render json: @group
-      else
-        render json: @group.errors, status: :unprocessable_entity
-      end
+    def user_groups
+      # render json: {:data=>@current_user.groups.as_json,:message=>"Success"}, status: 200
+      render json: {:data=>Constants::DUMMY_EVENT_GROUPS, :message=>"Success"}, status: 200
     end
 
-    # DELETE /groups/1
-    def destroy
-      @group.destroy
+    def group_members
+      # render json: {:data=>@group.users.except(:fb_token).as_json,:message=>"Success"}, status: 200
+      render json: {:data=>Constants::DUMMY_GROUP_MEMBERS, :message=>"Success"}, status: 200
     end
+
+    # def create
+    # end
+
+    # def invite_members
+    # end
+
+    # def join_group
+    # end
+
+    # def confirm_member
+    # end
+
+    # def destroy
+    #   if @group.destroy
+    #     render json: {:message=>"Success"}, status: 200
+    #   end
+    # end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_group
-        @group = Group.find(params[:id])
-      end
 
-      # Only allow a trusted parameter "white list" through.
-      def group_params
-        params.require(:group).permit(:admin_id,:name, {:members_attributes=>[:id,:user_id,:group_id,:_destroy]})
+    def set_group
+      @group = Group.find_by_uuid(params[:id])
+      unless @group
+        render json: {:message=>"No Group Found"}, status: 400 and return
       end
+    end
+
   end
 end
