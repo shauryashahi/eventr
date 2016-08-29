@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       # post 'groups/:id/invite', to:"groups#invite_members"
       # post 'join-group/:id', to:"groups#join_group"
       # post 'confirm-member/:id', to:"groups#confirm_member"
-      # delete 'groups/:id', to:"groups#destroy"
+      delete 'groups/:id', to:"groups#destroy"
     end
   end
 end
