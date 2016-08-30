@@ -20,6 +20,13 @@ module Api::V1
     end
 
     def create
+      group = Group.new(group_params)
+      group.owner_id = @current_user.id
+      if group.save
+        render json: {:data=>@group.attributes, :message=>"Success"}, status: 200
+      else
+        render json: {:data=>{},:message=>"#{group.errors.full_messages}"}, status: 400
+      end
     end
 
     def invite_members
@@ -46,6 +53,10 @@ module Api::V1
       unless @group
         render json: {:message=>"No Group Found"}, status: 400 and return
       end
+    end
+
+    def group_params
+      params.require(:group).permit(:fb_event_id,:name)
     end
 
   end
