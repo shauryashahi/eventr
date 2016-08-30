@@ -14,6 +14,7 @@ gem 'redis', '~> 3.0'
 gem 'redis-namespace'
 gem 'redis-rails'
 gem 'redis-store'
+gem 'sentry-raven'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
