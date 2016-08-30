@@ -3,14 +3,14 @@ class Group < ApplicationRecord
   has_many :members, :class_name => "::GroupUser", :foreign_key => :group_id, dependent: :destroy
   has_many :users, :through => :members
 
-  validates_presence_of :admin_id, :fb_event_id
+  validates_presence_of :owner_id, :fb_event_id
 
   accepts_nested_attributes_for :members,:reject_if => :check_dup_entry, :allow_destroy => true
   
-  after_create :add_admin_to_group
+  after_create :add_owner_to_group
 
-  def add_admin_to_group
-    self.members.create({:group_id=>self.id,:user_id=>self.admin_id})
+  def add_owner_to_group
+    self.members.create({:group_id=>self.id,:user_id=>self.owner_id})
   end
 
   def check_dup_entry(attributed)
@@ -18,7 +18,7 @@ class Group < ApplicationRecord
     false
   end
 
-  def admin
-    ::User.find_by(:id=>self.admin_id)
+  def owner
+    ::User.find_by(:id=>self.owner_id)
   end
 end

@@ -153,7 +153,7 @@ module Constants
   Register yourself @ http://www.shootoutchampionship.com/
   Play Hard, Go Pro!.",
     "is_canceled"=> false,
-    "is_viewer_admin"=> false,
+    "is_viewer_owner"=> false,
     "attending_count"=> 129,
     "maybe_count"=> 17,
     "interested_count"=> 17,
@@ -382,7 +382,7 @@ DUMMY_GROUPS = {
       "id": 1,
       "fb_event_id": "123123",
       "name": "GROUP 1",
-      "admin_id": 2,
+      "owner_id": 2,
       "uuid": "664577fd-48e4-471c-918a-67032f82ea84",
       "created_at": "2016-08-26T10:23:12.721Z",
       "updated_at": "2016-08-26T10:23:12.721Z"
@@ -391,7 +391,7 @@ DUMMY_GROUPS = {
       "id": 2,
       "fb_event_id": "123123",
       "name": "GROUP 2",
-      "admin_id": 3,
+      "owner_id": 3,
       "uuid": "252481c0-29c6-4fa8-8fc5-18dab265c27f",
       "created_at": "2016-08-26T10:23:24.231Z",
       "updated_at": "2016-08-26T10:23:24.231Z"
@@ -400,7 +400,7 @@ DUMMY_GROUPS = {
       "id": 3,
       "fb_event_id": "21232323",
       "name": "GROUP 3",
-      "admin_id": 2,
+      "owner_id": 2,
       "uuid": "88d91a73-c4a9-4e9c-8658-fd81f4c43e58",
       "created_at": "2016-08-26T10:23:42.166Z",
       "updated_at": "2016-08-26T10:23:42.166Z"
