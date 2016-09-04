@@ -12,7 +12,8 @@ module Api::V1
     end
 
     def rsvp_to_event
-      render json: {:message => "Success"}, status: 200
+      message, code, data = @current_user.rsvp_event(params[:fb_event_id], params[:rsvp_state])
+      render json: {:message => message, :data => data}, status: code
     end
 
     def events_by_location

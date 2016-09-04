@@ -36,7 +36,24 @@ class User < ApplicationRecord
       url = "https://graph.facebook.com/v2.7/#{self.fb_id}/events/#{rsvp_state}?fields=id,name,cover,place,is_canceled,attending_count,maybe_count,interested_count,start_time&since=#{Date.today.to_s}&access_token=#{self.fb_token}"
       fb_api_call url
     else
-      return "Please check the RSVP status of the event.", {}, 400
+      return "Please check the RSVP status of the event.", 400, {}
+    end
+  end
+
+  def rsvp_event fb_event_id, rsvp_state
+    if ALLOWED_RSVP_STATES.include?rsvp_state
+      url = URI.parse("https://graph.facebook.com/v2.7/#{fb_event_id}/#{rsvp_state}?access_token=#{self.fb_token}")
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Post.new(url)
+      request["content-type"] = 'application/json'
+      response = http.request(request)
+      data = JSON.parse(response.body)
+      (response.code=="200")? message="Success": message="Bad Request to FB"
+      return message, response.code, data 
+    else
+      return "Please check the RSVP status of the event.", 400, {}
     end
   end
 
