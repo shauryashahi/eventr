@@ -5,7 +5,9 @@ module Api::V1
     def event_groups
       if params[:fb_event_id].present?
         groups = Group.where(:fb_event_id=>params[:fb_event_id])
-        render json: {:data=>groups.as_json,:message => "Success"}, status: 200
+        my_group = @current_user.groups.find_by(:fb_event_id=>params[:fb_event_id])
+        data = {:groups=>groups.as_json,:my_group=>my_group.as_json}
+        render json: {:data=>data,:message => "Success"}, status: 200
       else
         render json: {:message => "Cannot find FB Event ID. Check Input Parameters."}, status: 400
       end
