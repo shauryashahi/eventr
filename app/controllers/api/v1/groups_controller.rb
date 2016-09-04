@@ -1,6 +1,6 @@
 module Api::V1
   class GroupsController < ApiController
-    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members]
+    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members, :make_admin]
 
     def event_groups
       if params[:fb_event_id].present?
@@ -18,14 +18,14 @@ module Api::V1
     end
 
     def group_members
-      render json: {:data=>@group.users.except(:fb_token).as_json,:message=>"Success"}, status: 200
+      render json: {:data=>build_members(@group),:message=>"Success"}, status: 200
     end
 
     def create
       group = Group.new(group_params)
       group.owner_id = @current_user.id
       if group.save
-        render json: {:data=>@group.attributes, :message=>"Success"}, status: 200
+        render json: {:data=>group.reload.attributes, :message=>"Success"}, status: 200
       else
         render json: {:data=>{},:message=>"#{group.errors.full_messages}"}, status: 400
       end
@@ -35,9 +35,42 @@ module Api::V1
     end
 
     def join_group
+      if @group.members.create({:group_id=>@group.id,:user_id=>@current_user.id})
+        render json: {:data => build_members(@group),:message=>"Success"}, status: 200
+      else
+        render json: {:data=>{}, :message=>"#{@group.errors.full_messages}"}, status: 400
+      end
     end
 
     def confirm_member
+      if verify_user_is_admin? @group
+        member=@group.members.find_by(:user_id=>params[:user_id])
+        if member
+          if member.update_attributes(:enabled=>true)
+            render json: {:data => build_members(@group), :message=>"Success"}, status: 200
+          else
+            render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
+          end
+        else
+          render json: {:data=>{}, :message=>"No Member Found"},status: 400
+        end
+      else
+        render json: {:data=>{},:message=>"Only Group Admin/Owner can confirm members to the group"}, status: 400
+      end
+    end
+
+    def make_admin
+      if @group.owner_id == @current_user.id
+        member=@group.members.find_by(:user_id=>params[:user_id])
+        if member
+          member.update_attributes(:role=>1,:enabled=>true)
+          render json: {:data => build_members(@group), :message=>"Success"}, status: 200
+        else
+          render json: {:data=>{}, :message=>"No Member Found"},status: 400
+        end
+      else
+        render json: {:data=>{},:message=>"Only Owners can Make Admins"}, status: 400
+      end
     end
 
     def destroy
@@ -59,6 +92,37 @@ module Api::V1
 
     def group_params
       params.require(:group).permit(:fb_event_id,:name)
+    end
+
+    def build_members group
+      members_array = Array.new
+      group.members.each do |mem|
+        data = Hash.new
+        data["id"] = mem.user.id
+        data["uuid"] = mem.user.uuid
+        data["fb_id"] = mem.user.fb_id
+        data["name"] = mem.user.name
+        data["email"] = mem.user.email
+        data["role"] = mem.role
+        data["enabled"] = mem.enabled
+        data["pic_url"] = mem.user.pic_url
+        members_array << data
+      end
+      members_array
+    end
+
+    def verify_user_is_admin? group
+      byebug
+      member = group.members.find_by(:user_id=>@current_user.id)
+      if member
+        if member.role=="member"
+          return false
+        else
+          return true
+        end
+      else
+        return false
+      end
     end
 
   end

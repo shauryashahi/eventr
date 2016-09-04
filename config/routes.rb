@@ -13,8 +13,9 @@ Rails.application.routes.draw do
       get 'group-members/:id', to:"groups#group_members"
       post 'groups', to:"groups#create"
       # post 'groups/:id/invite', to:"groups#invite_members"
-      # post 'join-group/:id', to:"groups#join_group"
-      # post 'confirm-member/:id', to:"groups#confirm_member"
+      post 'make-admin/:id', to:"groups#make_admin"
+      post 'join-group/:id', to:"groups#join_group"
+      post 'confirm-member/:id', to:"groups#confirm_member"
       delete 'groups/:id', to:"groups#destroy"
     end
   end
