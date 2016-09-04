@@ -35,10 +35,11 @@ module Api::V1
     end
 
     def join_group
-      if @group.members.create({:group_id=>@group.id,:user_id=>@current_user.id})
+      member = @group.members.new({:group_id=>@group.id,:user_id=>@current_user.id})
+      if member.save
         render json: {:data => build_members(@group),:message=>"Success"}, status: 200
       else
-        render json: {:data=>{}, :message=>"#{@group.errors.full_messages}"}, status: 400
+        render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
       end
     end
 
@@ -112,7 +113,6 @@ module Api::V1
     end
 
     def verify_user_is_admin? group
-      byebug
       member = group.members.find_by(:user_id=>@current_user.id)
       if member
         if member.role=="member"
