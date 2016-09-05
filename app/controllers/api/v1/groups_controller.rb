@@ -99,14 +99,15 @@ module Api::V1
       members_array = Array.new
       group.members.each do |mem|
         data = Hash.new
-        data["id"] = mem.user.id
-        data["uuid"] = mem.user.uuid
-        data["fb_id"] = mem.user.fb_id
-        data["name"] = mem.user.name
-        data["email"] = mem.user.email
+        usr = mem.user
+        data["id"] = usr.id
+        data["uuid"] = usr.uuid
+        data["fb_id"] = usr.fb_id
+        data["name"] = usr.name
+        data["email"] = usr.email
         data["role"] = mem.role
         data["enabled"] = mem.enabled
-        data["pic_url"] = mem.user.pic_url
+        data["pic_url"] = usr.pic_url
         members_array << data
       end
       members_array
