@@ -1,5 +1,7 @@
 class GroupUser < ApplicationRecord
 
+  EVENT_ATTENDING_CREDIT = 100
+
   belongs_to :user
   belongs_to :group
   
@@ -18,5 +20,15 @@ class GroupUser < ApplicationRecord
     else
       return true
     end
+  end
+
+  def user_attended_event
+    self.event_attended = true
+    self.save(:validate => false)
+    self.add_user_credits_for_attending_event
+  end
+
+  def add_user_credits_for_attending_event
+    Credit.create(:description=>"Credit Added for Attending Event #{self.group.fb_event_id}",:eventr_credits=>EVENT_ATTENDING_CREDIT,:user_id=>self.user_id)
   end
 end

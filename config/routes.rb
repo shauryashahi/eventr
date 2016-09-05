@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post 'make-admin/:id', to:"groups#make_admin"
       post 'join-group/:id', to:"groups#join_group"
       post 'confirm-member/:id', to:"groups#confirm_member"
+      post 'mark-attendance/:id', to:"groups#mark_attendance"
       delete 'groups/:id', to:"groups#destroy"
     end
   end

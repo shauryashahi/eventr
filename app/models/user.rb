@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 
   has_many :user_groups, :class_name => "::GroupUser", :foreign_key => :user_id, dependent: :destroy
+  has_many :credits
   has_many :groups, :through => :user_groups
 
   after_save :get_longlived_token

@@ -10,19 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160904193057) do
+ActiveRecord::Schema.define(version: 20160905123322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
+  create_table "credits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "eventr_credits"
+    t.string   "description"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["user_id"], name: "index_credits_on_user_id", using: :btree
+  end
+
   create_table "group_users", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "group_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "role",       default: 0
-    t.boolean  "enabled",    default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "role",           default: 0
+    t.boolean  "enabled",        default: false
+    t.boolean  "event_attended", default: false
     t.index ["group_id"], name: "index_group_users_on_group_id", using: :btree
     t.index ["user_id"], name: "index_group_users_on_user_id", using: :btree
   end
@@ -47,6 +57,7 @@ ActiveRecord::Schema.define(version: 20160904193057) do
     t.datetime "updated_at",                                       null: false
   end
 
+  add_foreign_key "credits", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
 end

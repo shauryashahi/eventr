@@ -1,6 +1,6 @@
 module Api::V1
   class GroupsController < ApiController
-    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members, :make_admin]
+    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members, :make_admin,:mark_attendance]
 
     def event_groups
       if params[:fb_event_id].present?
@@ -74,6 +74,20 @@ module Api::V1
       end
     end
 
+    def mark_attendance
+      if @group.owner_id == @current_user.id
+        member = @group.members.find_by(:user_id=>params[:user_id])
+        if member
+          member.user_attended_event
+          render json: {:data=>{}, :message=>"Success"}, status: 200
+        else
+          render json: {:data=>{}, :message=>"No Member Found"},status: 400
+        end
+      else
+        render json: {:data=>{},:message=>"Only Owners can Mark Attendance"}, status: 400
+      end
+    end
+
     def destroy
       if @group.destroy
         render json: {:message=>"Success"}, status: 200
@@ -108,6 +122,7 @@ module Api::V1
         data["role"] = mem.role
         data["enabled"] = mem.enabled
         data["pic_url"] = usr.pic_url
+        data["event_attended"] = mem.event_attended
         members_array << data
       end
       members_array
