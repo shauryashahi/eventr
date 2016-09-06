@@ -52,14 +52,14 @@ module Api::V1
       usr = member.user
       data["id"] = usr.id
       data["user_uuid"] = usr.uuid
-      data["member_uuid"] = mem.uuid
+      data["member_uuid"] = member.uuid
       data["fb_id"] = usr.fb_id
       data["name"] = usr.name
       data["email"] = usr.email
-      data["role"] = mem.role
-      data["enabled"] = mem.enabled
+      data["role"] = member.role
+      data["enabled"] = member.enabled
       data["pic_url"] = usr.pic_url
-      data["event_attended"] = mem.event_attended
+      data["event_attended"] = member.event_attended
       data
     end
 
