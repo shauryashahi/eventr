@@ -5,7 +5,7 @@ class Group < ApplicationRecord
 
   validates_presence_of :owner_id, :fb_event_id
   validates_uniqueness_of :name, :scope => :fb_event_id
-  validate :check_if_owner_already_in_event_group
+  validate :check_if_owner_already_in_event_group, :on => :create
 
   accepts_nested_attributes_for :members,:reject_if => :check_dup_entry, :allow_destroy => true
   

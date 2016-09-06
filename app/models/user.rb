@@ -34,7 +34,7 @@ class User < ApplicationRecord
 
   def fetch_fb_event_list rsvp_state
     if ALLOWED_RSVP_STATES.include?rsvp_state
-      url = "https://graph.facebook.com/v2.7/#{self.fb_id}/events/#{rsvp_state}?fields=id,name,cover,place,is_canceled,attending_count,maybe_count,interested_count,start_time&since=#{Date.today.to_s}&access_token=#{self.fb_token}"
+      url = "https://graph.facebook.com/v2.7/#{self.fb_id}/events/#{rsvp_state}?fields=id,name,cover,place,is_canceled,attending_count,maybe_count,interested_count,start_time,end_time&since=#{Date.today.to_s}&access_token=#{self.fb_token}"
       fb_api_call url
     else
       return "Please check the RSVP status of the event.", 400, {}

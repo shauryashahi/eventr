@@ -9,7 +9,7 @@ class GroupUser < ApplicationRecord
   validates_uniqueness_of :user_id, :scope => :group_id
   enum role: [:member,:admin,:owner]
 
-  validate :check_if_user_already_in_event_group
+  validate :check_if_user_already_in_event_group, :on => :create
 
   def check_if_user_already_in_event_group
     current_event_id = self.group.fb_event_id
@@ -24,7 +24,7 @@ class GroupUser < ApplicationRecord
 
   def user_attended_event
     self.event_attended = true
-    self.save(:validate => false)
+    self.save
     self.add_user_credits_for_attending_event
   end
 
