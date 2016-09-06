@@ -6,7 +6,7 @@ module Api::V1
       if params[:fb_event_id].present?
         groups = Group.where(:fb_event_id=>params[:fb_event_id])
         my_group = @current_user.groups.find_by(:fb_event_id=>params[:fb_event_id])
-        data = {:groups=>groups.as_json,:my_group=>my_group.as_json}
+        data = {:groups=>build_groups(groups),:my_group=>build_group_hash(my_group)}
         render json: {:data=>data,:message => "Success"}, status: 200
       else
         render json: {:message => "Cannot find FB Event ID. Check Input Parameters."}, status: 400
@@ -14,7 +14,7 @@ module Api::V1
     end
 
     def user_groups
-      render json: {:data=>@current_user.groups.as_json,:message=>"Success"}, status: 200
+      render json: {:data=>build_groups(@current_user.groups),:message=>"Success"}, status: 200
     end
 
     def group_members
@@ -25,7 +25,7 @@ module Api::V1
       group = Group.new(group_params)
       group.owner_id = @current_user.id
       if group.save
-        render json: {:data=>group.reload.attributes, :message=>"Success"}, status: 200
+        render json: {:data=>build_group_hash(group.reload), :message=>"Success"}, status: 200
       else
         render json: {:data=>{},:message=>"#{group.errors.full_messages}"}, status: 400
       end
@@ -59,22 +59,41 @@ module Api::V1
     def build_members group
       members_array = Array.new
       group.members.each do |mem|
-        data = Hash.new
-        usr = mem.user
-        data["id"] = usr.id
-        data["user_uuid"] = usr.uuid
-        data["member_uuid"] = mem.uuid
-        data["fb_id"] = usr.fb_id
-        data["name"] = usr.name
-        data["email"] = usr.email
-        data["role"] = mem.role
-        data["enabled"] = mem.enabled
-        data["pic_url"] = usr.pic_url
-        data["event_attended"] = mem.event_attended
+        data = build_member_hash(mem)
         members_array << data
       end
       members_array
     end
 
+    def build_member_hash member
+      data = Hash.new
+      usr = member.user
+      data["id"] = usr.id
+      data["user_uuid"] = usr.uuid
+      data["member_uuid"] = member.uuid
+      data["fb_id"] = usr.fb_id
+      data["name"] = usr.name
+      data["email"] = usr.email
+      data["role"] = member.role
+      data["enabled"] = member.enabled
+      data["pic_url"] = usr.pic_url
+      data["event_attended"] = member.event_attended
+      data
+    end
+
+    def build_groups groups
+      groups_array = Array.new
+      groups.each do |grp|
+        data = build_group_hash(grp)
+        groups_array << data
+      end
+      groups_array
+    end
+
+    def build_group_hash group
+      data = group.attributes
+      data["is_event_over"] = (Time.now > group.event_end_time rescue false)
+      data
+    end
   end
 end

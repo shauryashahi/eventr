@@ -3,13 +3,13 @@ class Group < ApplicationRecord
   has_many :members, :class_name => "::GroupUser", :foreign_key => :group_id, dependent: :destroy
   has_many :users, :through => :members
 
-  validates_presence_of :owner_id, :fb_event_id
+  validates_presence_of :owner_id, :fb_event_id, :name
   validates_uniqueness_of :name, :scope => :fb_event_id
   validate :check_if_owner_already_in_event_group, :on => :create
 
   accepts_nested_attributes_for :members,:reject_if => :check_dup_entry, :allow_destroy => true
   
-  after_create :add_owner_to_group
+  after_create :add_owner_to_group, :fetch_event_details_from_fb
 
 
   def check_if_owner_already_in_event_group
@@ -21,6 +21,14 @@ class Group < ApplicationRecord
     else
       return true
     end
+  end
+
+  def fetch_event_details_from_fb
+    message, code, data = self.owner.fetch_fb_event(self.fb_event_id)
+    start_time = data["start_time"].to_time
+    (data["end_time"].nil?)? end_time = start_time + 1.day : end_time = data["end_time"].to_time
+    name = data["name"]
+    self.update_attributes(:event_name=>name, :event_start_time => start_time, :event_end_time => end_time)
   end
   
   def add_owner_to_group
