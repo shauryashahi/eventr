@@ -44,7 +44,8 @@ module Api::V1
         data = Hash.new
         usr = mem.user
         data["id"] = usr.id
-        data["uuid"] = usr.uuid
+        data["user_uuid"] = usr.uuid
+        data["member_uuid"] = mem.uuid
         data["fb_id"] = usr.fb_id
         data["name"] = usr.name
         data["email"] = usr.email
