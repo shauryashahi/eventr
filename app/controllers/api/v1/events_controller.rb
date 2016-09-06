@@ -17,7 +17,12 @@ module Api::V1
     end
 
     def events_by_location
-      render json: {:data => Constants::DUMMY_NEARBY_EVENTS, :message => "Success"}, status: 200
+      if params[:lat].present? && params[:lng].present?
+        message, code, data = @current_user.nearby_events(params[:lat],params[:lng])
+        render json: {:data => data, :message => message}, status: code
+      else
+        render json: {:data=>{}, :message=>"Location Data Not Found. Enter Latitude and Longitude."}, status: 400
+      end
     end
 
     private

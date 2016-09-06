@@ -7,6 +7,8 @@ class User < ApplicationRecord
   after_save :get_longlived_token
 
   ALLOWED_RSVP_STATES = ["attending","declined","maybe","not_replied","created"]
+  NEARBY_EVENT_DISTANCE_RANGE = 3000
+  NEARBY_EVENTS_APP_SERVER_URL = "https://nearby-events.herokuapp.com"
 
   def get_longlived_token
     url = URI.parse("https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=#{ENV["FB_APP_ID"]}&client_secret=#{ENV["FB_APP_SECRET"]}&fb_exchange_token=#{self.fb_token}")
@@ -87,6 +89,20 @@ class User < ApplicationRecord
   def self.get_user_from_token token
     uuid = Redis.current.get("user:token:#{token}")
     user = User.find_by_uuid(uuid) rescue nil
+  end
+
+  def nearby_events lat, lng
+    url = "#{NEARBY_EVENTS_APP_SERVER_URL}/events?lat=#{lat}&lng=#{lng}&distance=#{NEARBY_EVENT_DISTANCE_RANGE}&sort=popularity&since=#{Date.today.to_s}&accessToken=#{self.fb_token}"
+    response = Net::HTTP.get_response(URI.parse(url))
+    data = JSON.parse(response.body)
+    if response.code=="200" 
+      message="Success"
+      code = "200" 
+    else
+      message = data["message"]["message"] || "Try again after a while"
+      code = "400"
+    end
+    return message, code, data
   end
 
     private
