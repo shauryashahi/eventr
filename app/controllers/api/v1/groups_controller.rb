@@ -43,59 +43,6 @@ module Api::V1
       end
     end
 
-    def confirm_member
-      if verify_user_is_admin? @group
-        member=@group.members.find_by(:user_id=>params[:user_id])
-        if member
-          if member.update_attributes(:enabled=>true)
-            render json: {:data => build_members(@group), :message=>"Success"}, status: 200
-          else
-            render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
-          end
-        else
-          render json: {:data=>{}, :message=>"No Member Found"},status: 400
-        end
-      else
-        render json: {:data=>{},:message=>"Only Group Admin/Owner can confirm members to the group"}, status: 400
-      end
-    end
-
-    def make_admin
-      if @group.owner_id == @current_user.id
-        member=@group.members.find_by(:user_id=>params[:user_id])
-        if member
-          member.update_attributes(:role=>1,:enabled=>true)
-          render json: {:data => build_members(@group), :message=>"Success"}, status: 200
-        else
-          render json: {:data=>{}, :message=>"No Member Found"},status: 400
-        end
-      else
-        render json: {:data=>{},:message=>"Only Owners can Make Admins"}, status: 400
-      end
-    end
-
-    def mark_attendance
-      if @group.owner_id == @current_user.id
-        member = @group.members.find_by(:user_id=>params[:user_id])
-        if member
-          member.user_attended_event
-          render json: {:data=>{}, :message=>"Success"}, status: 200
-        else
-          render json: {:data=>{}, :message=>"No Member Found"},status: 400
-        end
-      else
-        render json: {:data=>{},:message=>"Only Owners can Mark Attendance"}, status: 400
-      end
-    end
-
-    def destroy
-      if @group.destroy
-        render json: {:message=>"Success"}, status: 200
-      else
-        render json: {:message=>"#{@group.errors.full_messages}"}, status: 400
-      end
-    end
-
     private
 
     def set_group
@@ -115,7 +62,8 @@ module Api::V1
         data = Hash.new
         usr = mem.user
         data["id"] = usr.id
-        data["uuid"] = usr.uuid
+        data["user_uuid"] = usr.uuid
+        data["member_uuid"] = mem.uuid
         data["fb_id"] = usr.fb_id
         data["name"] = usr.name
         data["email"] = usr.email
@@ -126,19 +74,6 @@ module Api::V1
         members_array << data
       end
       members_array
-    end
-
-    def verify_user_is_admin? group
-      member = group.members.find_by(:user_id=>@current_user.id)
-      if member
-        if member.role=="member"
-          return false
-        else
-          return true
-        end
-      else
-        return false
-      end
     end
 
   end
