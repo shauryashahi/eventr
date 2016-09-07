@@ -36,6 +36,6 @@ class GroupUser < ApplicationRecord
   end
 
   def add_user_credits_for_attending_event
-    Credit.create(:description=>"Credit Added for Attending Event #{self.group.fb_event_id}",:eventr_credits=>EVENT_ATTENDING_CREDIT,:user_id=>self.user_id)
+    Credit.create(:for_fb_event_id => "#{self.group.fb_event_id}",:description=>"Credit Added for Attending Event #{self.group.fb_event_id}-#{self.group.event_name} by #{self.group.owner.name}",:eventr_credits=>EVENT_ATTENDING_CREDIT,:user_id=>self.user_id)
   end
 end
