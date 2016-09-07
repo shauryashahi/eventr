@@ -76,6 +76,7 @@ module Api::V1
       data["email"] = usr.email
       data["role"] = member.role
       data["enabled"] = member.enabled
+      data["status"] = member.state
       data["pic_url"] = usr.pic_url
       data["event_attended"] = member.event_attended
       data
