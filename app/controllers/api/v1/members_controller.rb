@@ -20,7 +20,7 @@ module Api::V1
 
     def make_admin
       if @member.group.owner_id == @current_user.id
-        @member.update_attributes(:role=>1,:enabled=>true)
+        @member.update_attributes(:role=>1,:enabled=>true,:state=>1)
         render json: {:data => build_member_hash(@member), :message=>"Success"}, status: 200
       else
         render json: {:data=>{},:message=>"Only Owners can Make Admins"}, status: 400

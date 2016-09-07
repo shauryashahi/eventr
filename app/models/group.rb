@@ -32,7 +32,7 @@ class Group < ApplicationRecord
   end
   
   def add_owner_to_group
-    owner = self.members.new({:group_id=>self.id,:user_id=>self.owner_id,:role=>2,:enabled=>true})
+    owner = self.members.new({:group_id=>self.id,:user_id=>self.owner_id,:role=>2,:enabled=>true,:state=>1})
     owner.save
   end
 
