@@ -4,8 +4,15 @@ module Api::V1
 
     def confirm_member
       if current_user_is_group_admin?
-        @member.update_attributes(:enabled=>true)
-        render json: {:data => build_member_hash(@member), :message=>"Success"}, status: 200
+        if params[:state].present?
+          if @member.confirm_approval(params[:state].to_i)
+            render json: {:data => build_member_hash(@member), :message=>"Success"}, status: 200
+          else
+            render json: {:data=>{},:message=>"#{@member.errors.full_messages}"}, status: 400
+          end
+        else
+          render json: {:data=>{}, :message=>"Enter Correct Parameter(state)"}, status: 400
+        end
       else
         render json: {:data=>{},:message=>"Only Group Admin/Owner can confirm members to the group"}, status: 400
       end
@@ -56,6 +63,7 @@ module Api::V1
       data["fb_id"] = usr.fb_id
       data["name"] = usr.name
       data["email"] = usr.email
+      data["status"] = member.state
       data["role"] = member.role
       data["enabled"] = member.enabled
       data["pic_url"] = usr.pic_url

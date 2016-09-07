@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906171639) do
+ActiveRecord::Schema.define(version: 20160907074247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20160906171639) do
     t.boolean  "enabled",        default: false
     t.boolean  "event_attended", default: false
     t.uuid     "uuid",           default: -> { "uuid_generate_v4()" }
+    t.integer  "state",          default: 0
     t.index ["group_id"], name: "index_group_users_on_group_id", using: :btree
     t.index ["user_id"], name: "index_group_users_on_user_id", using: :btree
   end

@@ -8,6 +8,7 @@ class GroupUser < ApplicationRecord
   validates_presence_of :user_id  
   validates_uniqueness_of :user_id, :scope => :group_id
   enum role: [:member,:admin,:owner]
+  enum state: [:requested, :approved, :declined]
 
   validate :check_if_user_already_in_event_group, :on => :create
 
@@ -26,6 +27,12 @@ class GroupUser < ApplicationRecord
     self.event_attended = true
     self.save
     self.add_user_credits_for_attending_event
+  end
+
+  def confirm_approval state
+    (state==1)? self.enabled = true : self.enabled = false
+    self.state = state
+    self.save
   end
 
   def add_user_credits_for_attending_event
