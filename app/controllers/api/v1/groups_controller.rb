@@ -91,13 +91,17 @@ module Api::V1
     end
 
     def build_group_hash group
-      data = group.attributes
-      data["is_event_over"] = (Time.now > group.event_end_time rescue false)
-      curr_member = GroupUser.find_by(:user_id=>@current_user.id,:group_id=>group.id)
-      data["current_user_group_status"] = curr_member.state rescue "not_requested"
-      data["is_current_user_member"] = curr_member.role? rescue false
-      data["is_current_user_owner"] = (curr_member.role=="owner") rescue false
-      data["is_current_user_admin"] = (curr_member.role=="admin" || curr_member.role=="owner") rescue false
+      unless group.nil? 
+        data = group.attributes
+        data["is_event_over"] = (Time.now > group.event_end_time rescue false)
+        curr_member = GroupUser.find_by(:user_id=>@current_user.id,:group_id=>group.id)
+        data["current_user_group_status"] = curr_member.state rescue "not_requested"
+        data["is_current_user_member"] = curr_member.role? rescue false
+        data["is_current_user_owner"] = (curr_member.role=="owner") rescue false
+        data["is_current_user_admin"] = (curr_member.role=="admin" || curr_member.role=="owner") rescue false
+      else
+        data = {}
+      end
       data
     end
   end
