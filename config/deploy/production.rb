@@ -8,7 +8,6 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
 server '52.26.148.176', user: 'deploy', roles: %w{web app db}
-config.serve_static_assets = true
 
 # role-based syntax
 # ==================
