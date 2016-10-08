@@ -9,7 +9,7 @@ class Group < ApplicationRecord
 
   accepts_nested_attributes_for :members,:reject_if => :check_dup_entry, :allow_destroy => true
   
-  after_create :add_owner_to_group, :fetch_event_details_from_fb
+  after_create :add_owner_to_group, :fetch_event_details_from_fb, :create_group_on_sendbird
 
 
   def check_if_owner_already_in_event_group
@@ -21,6 +21,20 @@ class Group < ApplicationRecord
     else
       return true
     end
+  end
+
+  def create_group_on_sendbird
+    url = URI.parse("https://api.sendbird.com/v3/group_channels")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(url)
+    request["content-type"] = 'application/json'
+    request["api-token"] = "#{ENV["SENDBIRD_APP_TOKEN"]}"
+    request.body = "{\"user_ids\":[\"#{self.owner.uuid}\"],\"name\":\"#{self.name+self.fb_event_id}\",\"is_distinct\":\"true\"}"
+    response = http.request(request)
+    data = JSON.parse(response.body)
+    self.update_attributes(:channel_url => data["channel_url"]) if response.code == "200"
   end
 
   def fetch_event_details_from_fb

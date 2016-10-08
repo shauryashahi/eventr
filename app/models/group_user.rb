@@ -23,6 +23,19 @@ class GroupUser < ApplicationRecord
     end
   end
 
+  def add_member_to_sendbird_group
+    url = URI.parse("https://api.sendbird.com/v3/group_channels/#{self.group.channel_url}/invite")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(url)
+    request["content-type"] = 'application/json'
+    request["api-token"] =  "#{ENV["SENDBIRD_APP_TOKEN"]}"
+    request.body = "{\"user_ids\":[\"#{self.user.uuid}\"]}"
+    response = http.request(request)
+    data = JSON.parse(response.body)
+  end
+
   def user_attended_event
     self.event_attended = true
     self.save

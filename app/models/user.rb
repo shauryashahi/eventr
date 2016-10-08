@@ -10,6 +10,18 @@ class User < ApplicationRecord
   NEARBY_EVENT_DISTANCE_RANGE = 3000
   NEARBY_EVENTS_APP_SERVER_URL = "https://nearby-events.herokuapp.com"
 
+  def add_user_to_sendbird
+    url = URI.parse("https://api.sendbird.com/v3/users")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(url)
+    request["content-type"] = 'application/json'
+    request["api-token"] = "#{ENV["SENDBIRD_APP_TOKEN"]}"
+    request.body = "{\"user_id\":\"#{self.uuid}\",\"nickname\":\"#{self.name}\",\"profile_url\":\"#{self.pic_url}\"}"
+    response = http.request(request)
+  end
+
   def get_longlived_token
     url = URI.parse("https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=#{ENV["FB_APP_ID"]}&client_secret=#{ENV["FB_APP_SECRET"]}&fb_exchange_token=#{self.fb_token}")
     response = Net::HTTP.get_response(url)
