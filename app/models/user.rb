@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :groups, :through => :user_groups
 
   after_save :get_longlived_token
+  after_create :add_user_to_sendbird
 
   ALLOWED_RSVP_STATES = ["attending","declined","maybe","not_replied","created"]
   NEARBY_EVENT_DISTANCE_RANGE = 3000
@@ -18,7 +19,7 @@ class User < ApplicationRecord
     request = Net::HTTP::Post.new(url)
     request["content-type"] = 'application/json'
     request["api-token"] = "#{ENV["SENDBIRD_APP_TOKEN"]}"
-    request.body = "{\"user_id\":\"#{self.uuid}\",\"nickname\":\"#{self.name}\",\"profile_url\":\"#{self.pic_url}\"}"
+    request.body = "{\"user_id\":\"#{self.reload.uuid}\",\"nickname\":\"#{self.name}\",\"profile_url\":\"#{self.pic_url}\"}"
     response = http.request(request)
   end
 

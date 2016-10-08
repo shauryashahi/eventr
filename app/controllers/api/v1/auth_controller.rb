@@ -4,7 +4,6 @@ module Api::V1
     def login_with_fb
       flag, user, auth_token = User.login_with_facebook(params[:fb_access_token])
       if flag
-        user.add_user_to_sendbird
         render json: {:data=>build_user_info(user),:access_token=>auth_token,:message=>"Logged In"}, status: 200
       else
         render json: {:data=>{}, :access_token=>nil, :message => "Cannot Login right now. Try again after a while."}, status: 422

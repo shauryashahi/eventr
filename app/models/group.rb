@@ -35,7 +35,7 @@ class Group < ApplicationRecord
     request.body = "{\"user_ids\":[\"#{self.owner.uuid}\"],\"name\":\"#{self.name+self.fb_event_id}\"}"
     response = http.request(request)
     data = JSON.parse(response.body)
-    self.update_attributes(:channel_url => data["channel_url"]) if response.code == "200"
+    self.channel_url = data["channel_url"] if response.code=="200"
   end
 
   def fetch_event_details_from_fb
