@@ -8,7 +8,7 @@ class User < ApplicationRecord
   after_create :add_user_to_sendbird
 
   ALLOWED_RSVP_STATES = ["attending","declined","maybe","not_replied","created"]
-  NEARBY_EVENT_DISTANCE_RANGE = 3000
+  NEARBY_EVENT_DISTANCE_RANGE = 30000
   NEARBY_EVENTS_APP_SERVER_URL = "https://nearby-events.herokuapp.com"
 
   def add_user_to_sendbird
