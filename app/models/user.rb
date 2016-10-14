@@ -114,7 +114,8 @@ class User < ApplicationRecord
   end
 
   def nearby_events lat, lng
-    url = "#{NEARBY_EVENTS_APP_SERVER_URL}/events?lat=#{lat}&lng=#{lng}&distance=#{NEARBY_EVENT_DISTANCE_RANGE}&sort=popularity&since=#{Date.today.to_s}&accessToken=#{self.fb_token}"
+    city = find_city_based_on_location(lat,lng)
+    url = "#{NEARBY_EVENTS_APP_SERVER_URL}/events?query=#{city}&lat=#{lat}&lng=#{lng}&distance=#{NEARBY_EVENT_DISTANCE_RANGE}&sort=popularity&since=#{Date.today.to_s}&accessToken=#{self.fb_token}"
     response = Net::HTTP.get_response(URI.parse(url))
     data = JSON.parse(response.body)
     if response.code=="200" 
@@ -125,6 +126,12 @@ class User < ApplicationRecord
       code = "400"
     end
     return message, code, data
+  end
+
+  def find_city_based_on_location lat,lng
+    geo_localization = "#{lat},#{lng}"
+    query = Geocoder.search(geo_localization).first
+    query.city
   end
 
     private
