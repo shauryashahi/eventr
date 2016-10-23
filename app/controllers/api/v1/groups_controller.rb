@@ -46,7 +46,7 @@ module Api::V1
         if Time.now > group.event_end_time
           render json: {:data=>{},:message=>"This event has ended."}, status: 400
         else
-          member = group.members.new({:group_id=>group.id,:user_id=>@current_user.id})
+          member = group.members.new({:group_id=>group.id,:user_id=>@current_user.id,:state=>1})
           fb_message, fb_code, fb_data = @current_user.rsvp_event(group.fb_event_id, "attending")
           if fb_code=="200"
             if member.save
