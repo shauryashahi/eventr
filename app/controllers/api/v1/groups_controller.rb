@@ -50,7 +50,7 @@ module Api::V1
           fb_message, fb_code, fb_data = @current_user.rsvp_event(group.fb_event_id, "attending")
           if fb_code=="200"
             if member.save
-              render json: {:data => build_members(group),:message=>"Success"}, status: 200
+              render json: {:data => build_group_hash(group),:message=>"Success"}, status: 200
             else
               render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
             end
