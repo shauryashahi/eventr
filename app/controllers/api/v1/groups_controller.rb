@@ -1,6 +1,6 @@
 module Api::V1
   class GroupsController < ApiController
-    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :invite_members, :make_admin,:mark_attendance]
+    before_action :set_group, only: [:group_members, :destroy, :confirm_member, :join_group, :send_invite, :make_admin,:mark_attendance]
 
     def event_groups
       if params[:fb_event_id].present?
@@ -31,15 +31,35 @@ module Api::V1
       end
     end
 
-    def invite_members
-    end
-
     def join_group
       member = @group.members.new({:group_id=>@group.id,:user_id=>@current_user.id})
       if member.save
         render json: {:data => build_members(@group),:message=>"Success"}, status: 200
       else
         render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
+      end
+    end
+
+    def join_group_with_invite_code
+      group = Group.find_by_invite_code(params[:invite_code])
+      if group
+        if Time.now > group.event_end_time
+          render json: {:data=>{},:message=>"This event has ended."}, status: 400
+        else
+          member = group.members.new({:group_id=>group.id,:user_id=>@current_user.id})
+          fb_message, fb_code, fb_data = @current_user.rsvp_event(group.fb_event_id, "attending")
+          if fb_code=="200"
+            if member.save
+              render json: {:data => build_members(group),:message=>"Success"}, status: 200
+            else
+              render json: {:data=>{}, :message=>"#{member.errors.full_messages}"}, status: 400
+            end
+          else
+            render json: {:data=>{},:message=>"#{fb_data["error"]["type"]}"}, status: 400
+          end
+        end
+      else
+        render json: {:data =>{}, :message=>"No Active Group Found"}, status: 400
       end
     end
 
@@ -100,6 +120,8 @@ module Api::V1
         data["is_current_user_member"] = curr_member.role? rescue false
         data["is_current_user_owner"] = (curr_member.role=="owner") rescue false
         data["is_current_user_admin"] = (curr_member.role=="admin" || curr_member.role=="owner") rescue false
+        (params[:request_source]=="ios")? link = "https://apple.com": link = "https://playstore.com"
+        data["invite_text"]="Hi, come join my Group on Eventr. Here's the invitation code - #{group.invite_code}. Download the app now from #{link}"
       else
         data = {}
       end

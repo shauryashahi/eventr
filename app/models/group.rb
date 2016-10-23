@@ -5,11 +5,12 @@ class Group < ApplicationRecord
 
   validates_presence_of :owner_id, :fb_event_id, :name
   validates_uniqueness_of :name, :scope => :fb_event_id
+  validates_uniqueness_of :invite_code
   validate :check_if_owner_already_in_event_group, :on => :create
 
   accepts_nested_attributes_for :members,:reject_if => :check_dup_entry, :allow_destroy => true
-  
-  before_create :create_group_on_sendbird  
+  before_validation :generate_invite_code
+  before_create :create_group_on_sendbird
   after_create :add_owner_to_group, :fetch_event_details_from_fb
 
 
@@ -54,6 +55,10 @@ class Group < ApplicationRecord
   def check_dup_entry(attributed)
     return true if ::GroupUser.find_by(:user_id=>attributed[:user_id],:group_id=>self.id)
     false
+  end
+
+  def generate_invite_code
+    self.invite_code = SecureRandom.hex(3)
   end
 
   def owner

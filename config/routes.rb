@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get 'user-groups', to:"groups#user_groups"
       get 'group-members/:id', to:"groups#group_members"
       post 'join-group/:id', to:"groups#join_group"
-      # post 'groups/:id/invite', to:"groups#invite_members"
+      post 'join-group-invite', to:"groups#join_group_with_invite_code"
 
       post 'confirm-member/:id', to:"members#confirm_member"
       post 'make-admin/:id', to:"members#make_admin"
