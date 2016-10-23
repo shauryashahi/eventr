@@ -6,7 +6,6 @@ module Api::V1
       if current_user_is_group_admin?
         if params[:state].present?
           if @member.confirm_approval(params[:state].to_i)
-            @member.add_member_to_sendbird_group
             render json: {:data => build_member_hash(@member), :message=>"Success"}, status: 200
           else
             render json: {:data=>{},:message=>"#{@member.errors.full_messages}"}, status: 400

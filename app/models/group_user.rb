@@ -46,6 +46,7 @@ class GroupUser < ApplicationRecord
     (state==1)? self.enabled = true : self.enabled = false
     self.state = state
     self.save
+    self.add_member_to_sendbird_group
   end
 
   def add_user_credits_for_attending_event
