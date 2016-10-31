@@ -85,6 +85,7 @@ class User < ApplicationRecord
     url = "https://graph.facebook.com/v2.7/#{fb_event_id}/#{state}/#{self.fb_id}?access_token=#{self.fb_token}"
     message, code, data = fb_api_call url
     rsvp_status = data["data"].first["rsvp_status"] rescue "entry_not_found"
+    state="unsure" if state=="maybe"
     (rsvp_status == "#{state}")? true : false
   end
 
