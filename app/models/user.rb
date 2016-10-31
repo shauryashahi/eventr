@@ -76,15 +76,16 @@ class User < ApplicationRecord
   def fetch_fb_event fb_event_id
     url = "https://graph.facebook.com/v2.7/#{fb_event_id}?fields=id,name,cover,description,place,is_canceled,is_viewer_admin,attending_count,maybe_count,interested_count,noreply_count,declined_count,owner,ticket_uri,start_time,end_time,timezone&access_token=#{self.fb_token}"
     message, code, data = fb_api_call url
-    data["user_attending_event"] = is_user_attending_event? fb_event_id
+    data["user_attending_event"] = user_event_rsvp? fb_event_id, "attending"
+    data["user_interested_event"] = user_event_rsvp? fb_event_id, "maybe"
     return message, code, data
   end
 
-  def is_user_attending_event? fb_event_id
-    url = "https://graph.facebook.com/v2.7/#{fb_event_id}/attending/#{self.fb_id}?access_token=#{self.fb_token}"
+  def user_event_rsvp? fb_event_id, state
+    url = "https://graph.facebook.com/v2.7/#{fb_event_id}/#{state}/#{self.fb_id}?access_token=#{self.fb_token}"
     message, code, data = fb_api_call url
-    rsvp_status = data["data"].first["rsvp_status"] rescue "not_attending"
-    (rsvp_status == "attending")? true : false
+    rsvp_status = data["data"].first["rsvp_status"] rescue "entry_not_found"
+    (rsvp_status == "#{state}")? true : false
   end
 
   def self.get_facebook_data token
