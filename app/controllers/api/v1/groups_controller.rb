@@ -121,7 +121,7 @@ module Api::V1
         data["is_current_user_member"] = curr_member.role? rescue false
         data["is_current_user_owner"] = (curr_member.role=="owner") rescue false
         data["is_current_user_admin"] = (curr_member.role=="admin" || curr_member.role=="owner") rescue false
-        (params[:request_source]=="ios")? link = "https://apple.com": link = "https://playstore.com"
+        (params[:request_source]=="ios")? link = "https://apple.com": link = "https://play.google.com/store/apps/details?id=com.eventr.app.eventr"
         data["invite_text"]="Hi, come join my Group on Eventr. Here's the invitation code - #{group.invite_code}. Download the app now from #{link}"
       else
         data = {}
